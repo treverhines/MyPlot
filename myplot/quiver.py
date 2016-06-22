@@ -78,7 +78,7 @@ class Quiver(_Quiver):
     self.ellipse_kwargs['zorder'] = kwargs.get('zorder')
     self.ellipse_kwargs['edgecolors'] = kwargs.pop('ellipse_edgecolors','k')
     self.ellipse_kwargs['facecolors'] = kwargs.pop('ellipse_facecolors','none')
-    self.ellipse_kwargs['linewidths'] = kwargs.pop('ellipse_linewidths',2.0)
+    self.ellipse_kwargs['linewidths'] = kwargs.pop('ellipse_linewidths',1.0)
     _Quiver.__init__(self,
                      ax,
                      *args,
