@@ -22,4 +22,28 @@ def transparent_colorbar(*args,**kwargs):
   cbar.draw_all()
   cbar.solids.set_rasterized(True)
   return cbar
+  
+def overlay(top,bot):
+  ''' 
+  Parameters
+  ----------
+    rgba : (...,4) array
+
+    base : (...,4) array or (...,3) array
+
+  Returns
+  -------
+    out : (...,3) array 
+  '''
+  top = np.asarray(top)
+  bot = np.asarray(bot)
+  if bot.shape[-1] == 4:
+    base_rgb = np.ones(bot.shape[:-1]+(3,))
+    bot = overlay(bot,base_rgb)
+
+  alpha = top[...,3]
+  rgb = bot*(1-alpha) + alpha*top[...,[0,1,2]]
+  return rgb
+
+  
 

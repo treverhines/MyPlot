@@ -10,6 +10,20 @@ from rbf.interpolant import RBFInterpolant
 import rbf.basis
 import matplotlib.patches as patches
 
+def as_2d_array(a):
+  a = np.asarray(a)
+  dim = len(a.shape)
+  if dim == 1:
+    input_2d = False
+    return a[None,:],input_2d
+    
+  elif dim == 2:
+    input_2d = True
+    return a,input_2d
+
+  else:
+    raise ValueError('array must be either 1 or 2 dimensional')
+      
 class Basemap(_Basemap):
   def drawtopography(self,resolution=200,cmap=matplotlib.cm.gray,vmin=None,vmax=None,**kwargs):
     try:
@@ -128,15 +142,47 @@ class Basemap(_Basemap):
     return
 
   def axes_to_geodetic(self,pnt,ax):
+    ''' 
+    converts points from axes coordinates to geodetic coordinates
+    
+    Parameters
+    ----------
+      pnt : (2,) or (N,2) array
+      
+      ax : Axes Instance
+
+    '''  
+    self.set_axes_limits(ax=ax)
+    pnt,input_2d = as_2d_array(pnt)
     pnt_disp = ax.transAxes.transform(pnt)
     pnt_data = ax.transData.inverted().transform(pnt_disp)
-    pnt_geo = self(pnt_data[0],pnt_data[1],inverse=True)
-    return np.array(pnt_geo)
+    pnt_geo = self(pnt_data[:,0],pnt_data[:,1],inverse=True)
+    pnt_geo = np.array(pnt_geo).T
+    if not input_2d:
+      pnt_geo = pnt_geo[0,:]
+      
+    return pnt_geo
 
   def geodetic_to_axes(self,pnt,ax):
-    pnt_data = self(pnt[0],pnt[1])
+    ''' 
+    converts points from geodetic coordinates to axes coordinates
+    
+    Parameters
+    ----------
+      pnt : (2,) or (N,2) array
+      
+      ax : Axes Instance
+
+    '''  
+    self.set_axes_limits(ax=ax)
+    pnt,input_2d = as_2d_array(pnt)
+    pnt_data = self(pnt[:,0],pnt[:,1])
+    pnt_data = np.array(pnt_data).T 
     pnt_disp = ax.transData.transform(pnt_data)
     pnt_ax = ax.transAxes.inverted().transform(pnt_disp)
+    if not input_2d:
+      pnt_ax = pnt_ax[0,:]
+      
     return pnt_ax
       
   def drawminimap(self,rect,ax=None,fig=None,scale=5.0):
