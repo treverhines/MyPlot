@@ -81,7 +81,8 @@ class VectorXSection:
       x,y,z = pflat[:,0],pflat[:,1],pflat[:,2]
       value = self._f(pflat,*self._f_args,**self._f_kwargs)
       u,v,w = value[:,0],value[:,1],value[:,2]
-      m = mlab.quiver3d(x,y,z,u,v,w,mode='arrow',color=(1.0,1.0,1.0),scale_factor=self.scale_units,resolution=20,**kwargs)
+      m = mlab.quiver3d(x,y,z,u,v,w,mode='arrow',color=(1.0,1.0,1.0),scale_factor=self.scale_units,
+                        resolution=20,**kwargs)
       mlab.draw()
  
 
