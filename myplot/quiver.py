@@ -117,7 +117,7 @@ class Quiver(_Quiver):
 
     # do not draw ellipses which are too small  
     too_small = 0.001
-    length = np.sqrt(self.U**2 + self.V**2)
+    length = np.sqrt((self.U/self.scale)**2 + (self.V/self.scale)**2)
     with warnings.catch_warnings():
       # do not print out zero division warning
       warnings.simplefilter("ignore")
