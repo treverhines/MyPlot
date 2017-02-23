@@ -6,8 +6,9 @@ import matplotlib.colors
 
 def pseudo_transparent_cmap(cmap,alpha):
   arr = cmap(np.arange(256))
-  arr[:,[0,1,2]] = (1-alpha) + alpha*arr[:,[0,1,2]]
-  new_cmap = matplotlib.colors.ListedColormap(arr)
+  alpha = alpha*arr[:,[3]]
+  colors = (1-alpha) + alpha*arr[:,[0,1,2]]
+  new_cmap = matplotlib.colors.ListedColormap(colors)
   return new_cmap
 
 def transparent_colorbar(*args,**kwargs):
